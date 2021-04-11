@@ -6,7 +6,7 @@ from pricing_rules import Item
 
 class MyTestCase(unittest.TestCase):
     def test_empty_cart_with_no_rules_is_0(self):
-        my_rules = {}
+        my_rules = set()
         sut = Checkout(my_rules)
         self.assertEqual(0.0, sut.get_total())
 
