@@ -43,6 +43,57 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(expected_total, sut.get_total())
 
+    def test_two_for_one_discount_is_applied(self):
+        voucher_desc = Item('VOUCHER', 'Gift Card', 5.0)
+        tshirt_desc = Item('TSHIRT', 'Summer T-Shirt', 20.0)
+        pants_desc = Item('PANTS', 'Summer Pants', 7.5)
+
+        my_rules = {voucher_desc, tshirt_desc, pants_desc,
+                    TwoForOneItem(voucher_desc),
+                    ReducedPriceIfNOrMoreItems(tshirt_desc, 3, 19.0)}
+
+        sut = Checkout(my_rules)
+        sut.add_item('VOUCHER')
+        sut.add_item('TSHIRT')
+        sut.add_item('VOUCHER')
+        expected_total = 25.0
+
+        self.assertEqual(expected_total, sut.get_total())
+
+    def test_reduced_price_for_n_or_more_discount_is_applied(self):
+        voucher_desc = Item('VOUCHER', 'Gift Card', 5.0)
+        tshirt_desc = Item('TSHIRT', 'Summer T-Shirt', 20.0)
+        pants_desc = Item('PANTS', 'Summer Pants', 7.5)
+
+        my_rules = {voucher_desc, tshirt_desc, pants_desc,
+                    TwoForOneItem(voucher_desc),
+                    ReducedPriceIfNOrMoreItems(tshirt_desc, 3, 19.0)}
+
+        sut = Checkout(my_rules)
+        for it in ['TSHIRT', 'TSHIRT', 'TSHIRT', 'VOUCHER', 'TSHIRT']:
+            sut.add_item(it)
+
+        expected_total = 81.0
+
+        self.assertEqual(expected_total, sut.get_total())
+
+    def test_apply_2x1_n_3_item_discounts_in_cart(self):
+        voucher_desc = Item('VOUCHER', 'Gift Card', 5.0)
+        tshirt_desc = Item('TSHIRT', 'Summer T-Shirt', 20.0)
+        pants_desc = Item('PANTS', 'Summer Pants', 7.5)
+
+        my_rules = {voucher_desc, tshirt_desc, pants_desc,
+                    TwoForOneItem(voucher_desc),
+                    ReducedPriceIfNOrMoreItems(tshirt_desc, 3, 19.0)}
+
+        sut = Checkout(my_rules)
+        for it in ['VOUCHER', 'TSHIRT', 'VOUCHER', 'VOUCHER', 'PANTS', 'TSHIRT', 'TSHIRT']:
+            sut.add_item(it)
+
+        expected_total = 74.50
+
+        self.assertEqual(expected_total, sut.get_total())
+
 
 if __name__ == '__main__':
     unittest.main()
