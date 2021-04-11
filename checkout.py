@@ -1,3 +1,4 @@
+import operator
 from functools import reduce
 from typing import AbstractSet
 
@@ -14,4 +15,4 @@ class Checkout:
         self.items.append(item_code)
 
     def get_total(self) -> float:
-        return reduce(sum, list(map(lambda rule: rule.get_price(self.items), self.pricing_rules)))
+        return reduce(lambda acc, rule: acc + rule.get_price(self.items), self.pricing_rules, 0.0)
