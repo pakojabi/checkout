@@ -6,9 +6,9 @@ from pricing_rules import PricingRule
 
 
 class Checkout:
-    items = []
 
     def __init__(self, pricing_rules: AbstractSet[PricingRule]):
+        self.items = []
         self.pricing_rules = pricing_rules
 
     def add_item(self, item_code):
