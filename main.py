@@ -11,6 +11,6 @@ if __name__ == '__main__':
     da_checkout = checkout.Checkout(my_rules)
     da_checkout.add_item('VOUCHER')
     da_checkout.add_item('TSHIRT')
-    # da_checkout.add_item('PANTS')
+    da_checkout.add_item('PANTS')
     total = da_checkout.get_total()
     print(f"total: {total}")
