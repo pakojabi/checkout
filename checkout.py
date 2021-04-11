@@ -1,3 +1,6 @@
+from functools import reduce
+
+
 class Checkout:
     items = []
 
@@ -8,6 +11,4 @@ class Checkout:
         self.items.append(item_code)
 
     def get_total(self) -> float:
-        return 0.0
-
-
+        return reduce(lambda acc, rule: acc + rule.get_price(self.items), self.pricing_rules)
