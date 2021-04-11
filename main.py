@@ -1,16 +1,27 @@
-import checkout
-import discounts
-import pricing_rules
+from flask import Flask, Response
+from checkout_controller import CheckoutController
+
+app = Flask(__name__)
+controller = CheckoutController()
+
+
+@app.route('/newCheckout')
+def new_checkout():
+    controller.clear_checkout()
+    return Response("OK", status=200, mimetype='text/plain')
+
+
+@app.route('/add/<item>')
+def add_item(item):
+    return Response("Item added", status=200, mimetype='text/plain') \
+        if controller.add_item(item) \
+        else Response("Item not found", status=400, mimetype='text/plain')
+
+
+@app.route('/getTotal')
+def get_total():
+    return Response(f"Total {controller.get_total()} €", status=200, mimetype='text/plain')
+
 
 if __name__ == '__main__':
-    voucher = pricing_rules.Item('VOUCHER', 'Gift Card', 5.0)
-    tshirt = pricing_rules.Item('TSHIRT', 'Summer T-Shirt', 20.0)
-    pants = pricing_rules.Item('PANTS', 'Summer Pants', 7.50)
-
-    my_rules = {voucher, tshirt, pants}
-    da_checkout = checkout.Checkout(my_rules)
-    da_checkout.add_item('VOUCHER')
-    da_checkout.add_item('TSHIRT')
-    da_checkout.add_item('PANTS')
-    total = da_checkout.get_total()
-    print(f"total: {total}")
+    app.run()
