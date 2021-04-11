@@ -94,6 +94,19 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(expected_total, sut.get_total())
 
+    def test_no_duplicate_item_rules_can_be_added(self):
+        voucher_desc1 = Item('VOUCHER', 'Gift Card', 5.0)
+        voucher_desc2 = Item('VOUCHER', 'Gift Card', 5.0)
+
+        my_rules = {voucher_desc1, voucher_desc2}
+        self.assertEqual(1, len(my_rules))
+
+    def test_adding_non_existent_item_causes_error(self):
+        voucher_desc = Item('VOUCHER', 'Gift Card', 5.0)
+        my_rules = {voucher_desc}
+        sut = Checkout(my_rules)
+        self.assertRaises(ValueError, sut.add_item('TOILETPAPER'))
+
 
 if __name__ == '__main__':
     unittest.main()
