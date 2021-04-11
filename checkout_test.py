@@ -105,7 +105,7 @@ class MyTestCase(unittest.TestCase):
         voucher_desc = Item('VOUCHER', 'Gift Card', 5.0)
         my_rules = {voucher_desc}
         sut = Checkout(my_rules)
-        self.assertRaises(ValueError, sut.add_item('TOILETPAPER'))
+        self.assertRaises(ValueError, lambda: sut.add_item('TOILETPAPER'))
 
 
 if __name__ == '__main__':
